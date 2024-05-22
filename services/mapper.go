@@ -3,11 +3,44 @@ package services
 import (
 	"fmt"
 	"github.com/dstotijn/go-notion"
+	"strings"
 )
 
 type Markdown struct {
 }
 
+func (m *Markdown) richi(p []notion.RichText) string {
+	str := ""
+	for _, text := range p {
+		if text.HRef != nil {
+			str += fmt.Sprintf("[%s](%s)", text.PlainText, *text.HRef)
+		} else {
+			str += text.PlainText
+		}
+		// possible todo: combinations of annotations
+		if text.Annotations != nil {
+			if text.Annotations.Bold {
+				str = fmt.Sprintf("**%s** ", strings.TrimSpace(str))
+			}
+			if text.Annotations.Italic {
+				str = fmt.Sprintf("_%s_", str)
+			}
+			if text.Annotations.Strikethrough {
+				str = fmt.Sprintf("~~%s~~", str)
+			}
+			if text.Annotations.Underline {
+				str = fmt.Sprintf("<u>%s</u>", str)
+			}
+			if text.Annotations.Code {
+				str = fmt.Sprintf("`%s`", str)
+			}
+
+		}
+	}
+	return str
+}
+
+// deprecated
 func (m *Markdown) richTextToMarkdown(r notion.RichText) string {
 	return fmt.Sprint(r.PlainText)
 }
@@ -27,10 +60,7 @@ func (m *Markdown) mapEquationBlock(t *notion.EquationBlock) string {
 }
 
 func (m *Markdown) mapParagraphBlock(p *notion.ParagraphBlock) string {
-	str := ""
-	for _, text := range p.RichText {
-		str += m.richTextToMarkdown(text)
-	}
+	str := m.richi(p.RichText)
 	return str
 }
 
@@ -43,21 +73,20 @@ func (m *Markdown) mapVideoBlock(v *notion.VideoBlock) string {
 
 }
 func (m *Markdown) mapToggleBlock(t *notion.ToggleBlock) string {
-	str := ""
-	for _, text := range t.RichText {
-		str += "## " + m.richTextToMarkdown(text)
-	}
-	return str
+	return "## " + m.richi(t.RichText)
 }
 func (m *Markdown) mapBulletedListItemBlock(b *notion.BulletedListItemBlock) string {
-	str := ""
-	for _, text := range b.RichText {
-		str += "* " + m.richTextToMarkdown(text)
-	}
+	str := "* " + m.richi(b.RichText) + "\n"
+
 	return str
 }
 func (m *Markdown) mapCodeBlock(b *notion.CodeBlock) string {
-	return fmt.Sprintf("```%s\n%s\n```", b.Language, m.richTextToMarkdown(b.RichText[0]))
+	language := ""
+	if b.Language != nil {
+		language = *b.Language
+	}
+
+	return fmt.Sprintf("```%s\n%s\n```", language, m.richi(b.RichText))
 }
 
 func (m *Markdown) mapEmbedBlock(b *notion.EmbedBlock) string {
@@ -68,19 +97,11 @@ func (m *Markdown) mapDividerBlock() string {
 	return "---"
 }
 func (m *Markdown) mapQuoteBlock(b *notion.QuoteBlock) string {
-	str := ""
-	for _, text := range b.RichText {
-		str += "> " + m.richTextToMarkdown(text)
-	}
-	return str
+	return "> " + m.richi(b.RichText)
 }
 
 func (m *Markdown) mapToDoBlock(b *notion.ToDoBlock) string {
-	str := ""
-	for _, text := range b.RichText {
-		str += "TODO: " + m.richTextToMarkdown(text)
-	}
-	return str
+	return "TODO: " + m.richi(b.RichText)
 }
 
 func (m *Markdown) mapBookmarkBlock(b *notion.BookmarkBlock) string {
@@ -100,23 +121,12 @@ func (m *Markdown) mapNumberedListItemBlock(b *notion.NumberedListItemBlock) str
 }
 
 func (m *Markdown) mapHeading1Block(h *notion.Heading1Block) string {
-	str := ""
-	for _, text := range h.RichText {
-		str += "# " + m.richTextToMarkdown(text)
-	}
-	return str
+	return "# " + m.richi(h.RichText)
+
 }
 func (m *Markdown) mapHeading2Block(h *notion.Heading2Block) string {
-	str := ""
-	for _, text := range h.RichText {
-		str += "## " + m.richTextToMarkdown(text)
-	}
-	return str
+	return "## " + m.richi(h.RichText)
 }
 func (m *Markdown) mapHeading3Block(h *notion.Heading3Block) string {
-	str := ""
-	for _, text := range h.RichText {
-		str += "### " + m.richTextToMarkdown(text)
-	}
-	return str
+	return "### " + m.richi(h.RichText)
 }
