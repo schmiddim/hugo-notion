@@ -85,44 +85,44 @@ func (n *NotionWrapper) readChildrenToMarkDown(blocks []notion.Block) string {
 	for _, child := range blocks {
 		switch block := child.(type) {
 		case *notion.ParagraphBlock:
-			s += md.mapParagraphBlock(block) + "\n"
+			s += md.mapParagraphBlock(block)
 		case *notion.Heading1Block:
-			s += md.mapHeading1Block(block) + "\n"
+			s += md.mapHeading1Block(block)
 		case *notion.Heading2Block:
-			s += md.mapHeading2Block(block) + "\n"
+			s += md.mapHeading2Block(block)
 		case *notion.Heading3Block:
-			s += md.mapHeading3Block(block) + "\n"
+			s += md.mapHeading3Block(block)
 		case *notion.ImageBlock:
-			s += md.mapImageBlock(block) + "\n"
+			s += md.mapImageBlock(block)
 		case *notion.BookmarkBlock:
-			s += md.mapBookmarkBlock(block) + "\n"
+			s += md.mapBookmarkBlock(block)
 		case *notion.BulletedListItemBlock:
-			s += md.mapBulletedListItemBlock(block) + "\n"
+			s += md.mapBulletedListItemBlock(block)
 		case *notion.DividerBlock:
-			s += md.mapDividerBlock() + "\n"
+			s += md.mapDividerBlock()
 		case *notion.EmbedBlock:
-			s += md.mapEmbedBlock(block) + "\n"
+			s += md.mapEmbedBlock(block)
 		case *notion.NumberedListItemBlock:
-			s += md.mapNumberedListItemBlock(block) + "\n"
+			s += md.mapNumberedListItemBlock(block)
 		case *notion.QuoteBlock:
-			s += md.mapQuoteBlock(block) + "\n"
+			s += md.mapQuoteBlock(block)
 		case *notion.VideoBlock:
-			s += md.mapVideoBlock(block) + "\n"
+			s += md.mapVideoBlock(block)
 		case *notion.ToDoBlock:
-			s += md.mapToDoBlock(block) + "\n"
+			s += md.mapToDoBlock(block)
 		case *notion.CodeBlock:
-			s += md.mapCodeBlock(block) + "\n"
+			s += md.mapCodeBlock(block)
 		case *notion.TableBlock:
-			s += md.mapTableBlock(block) + "\n"
+			s += md.mapTableBlock(block)
 		case *notion.LinkPreviewBlock:
-			s += md.mapLinkPreviewBlock(block) + "\n"
+			s += md.mapLinkPreviewBlock(block)
 		case *notion.EquationBlock:
-			s += md.mapEquationBlock(block) + "\n"
+			s += md.mapEquationBlock(block)
 		default:
 			log.Error("Unsupported block type")
 			log.Error(block)
-
 		}
+		s += "\n"
 	}
 	return s
 }
