@@ -1,0 +1,19 @@
+name: "Hugo Notion Action"
+description: "A GitHub Action to fetch Content from Notion and generate Hugo Markdown."
+inputs:
+  NOTION_DB_ID:
+    description: "Notion Database ID"
+    required: true
+  NOTION_TOKEN:
+    description: "Notion Token"
+    required: true
+  PATH:
+    description: "Output directory for the generated Markdown files."
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.NOTION_DB_ID }}
+    - ${{ inputs.NOTION_TOKEN }}
+    - ${{ inputs.PATH }}
