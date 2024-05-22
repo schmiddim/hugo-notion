@@ -85,7 +85,7 @@ func (n *NotionWrapper) readChildrenToMarkDown(blocks []notion.Block) string {
 	for _, child := range blocks {
 		switch block := child.(type) {
 		case *notion.ParagraphBlock:
-			s += md.mapParagraphBlock(block)
+			s += md.mapParagraphBlock(block) + "\n"
 		case *notion.Heading1Block:
 			s += md.mapHeading1Block(block)
 		case *notion.Heading2Block:
@@ -116,6 +116,8 @@ func (n *NotionWrapper) readChildrenToMarkDown(blocks []notion.Block) string {
 			s += md.mapTableBlock(block)
 		case *notion.LinkPreviewBlock:
 			s += md.mapLinkPreviewBlock(block)
+		case *notion.EquationBlock:
+			s += md.mapEquationBlock(block)
 		default:
 			log.Error("Unsupported block type")
 			log.Error(block)

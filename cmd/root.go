@@ -27,9 +27,10 @@ var rootCmd = &cobra.Command{
 
 		}
 		wr := services.NewNotionWrapper(token, dbId)
-
 		writer := services.NewWriter(postPath)
-		writer.DeleteFilesInFolder()
+		if skipPrune == false {
+			writer.DeleteFilesInFolder()
+		}
 		posts := wr.GetPostsFromNotionDB()
 
 		for post := range posts {
@@ -49,10 +50,13 @@ func Execute() {
 }
 
 var postPath = ""
+var skipPrune bool
 
 func init() {
 	//rootCmd.AddCommand(notionCmd)
 	rootCmd.Flags().StringVarP(&postPath, "path", "p", "", "path to the folder where the posts will be written")
+	rootCmd.Flags().BoolVarP(&skipPrune, "skip-prune", "s", false, "skip the prune operation")
+
 	rootCmd.MarkFlagsOneRequired("path")
 
 	viper.AutomaticEnv()

@@ -9,7 +9,7 @@ type Markdown struct {
 }
 
 func (m *Markdown) richTextToMarkdown(r notion.RichText) string {
-	return fmt.Sprintln(r.PlainText + "\n\n")
+	return fmt.Sprint(r.PlainText)
 }
 
 func (m *Markdown) mapLinkPreviewBlock(l *notion.LinkPreviewBlock) string {
@@ -20,6 +20,10 @@ func (m *Markdown) mapTableBlock(t *notion.TableBlock) string {
 	str := "+---+Implement the Table---+---+\n"
 
 	return str
+}
+
+func (m *Markdown) mapEquationBlock(t *notion.EquationBlock) string {
+	return fmt.Sprintf("$$%s$$", t.Expression)
 }
 
 func (m *Markdown) mapParagraphBlock(p *notion.ParagraphBlock) string {
