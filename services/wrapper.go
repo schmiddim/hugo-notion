@@ -85,7 +85,7 @@ func (n *NotionWrapper) readChildrenToMarkDown(blocks []notion.Block) string {
 	for _, child := range blocks {
 		switch block := child.(type) {
 		case *notion.ParagraphBlock:
-			s += md.mapParagraphBlock(block) + "\n"
+			s += md.mapParagraphBlock(block)
 		case *notion.Heading1Block:
 			s += md.mapHeading1Block(block)
 		case *notion.Heading2Block:
@@ -124,5 +124,5 @@ func (n *NotionWrapper) readChildrenToMarkDown(blocks []notion.Block) string {
 
 		}
 	}
-	return s
+	return s + "\n"
 }

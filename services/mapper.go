@@ -23,16 +23,16 @@ func (m *Markdown) richi(p []notion.RichText) string {
 				str = fmt.Sprintf("**%s** ", strings.TrimSpace(str))
 			}
 			if text.Annotations.Italic {
-				str = fmt.Sprintf("_%s_", str)
+				str = fmt.Sprintf("_%s_ ", strings.TrimSpace(str))
 			}
 			if text.Annotations.Strikethrough {
-				str = fmt.Sprintf("~~%s~~", str)
+				str = fmt.Sprintf("~~%s~~ ", strings.TrimSpace(str))
 			}
 			if text.Annotations.Underline {
-				str = fmt.Sprintf("<u>%s</u>", str)
+				str = fmt.Sprintf("<u>%s</u> ", strings.TrimSpace(str))
 			}
 			if text.Annotations.Code {
-				str = fmt.Sprintf("`%s`", str)
+				str = fmt.Sprintf("`%s` ", strings.TrimSpace(str))
 			}
 
 		}
@@ -86,7 +86,7 @@ func (m *Markdown) mapCodeBlock(b *notion.CodeBlock) string {
 		language = *b.Language
 	}
 
-	return fmt.Sprintf("```%s\n%s\n```", language, m.richi(b.RichText))
+	return fmt.Sprintf("```%s\n%s\n```", language, strings.TrimSpace(m.richi(b.RichText)))
 }
 
 func (m *Markdown) mapEmbedBlock(b *notion.EmbedBlock) string {
