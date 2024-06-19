@@ -33,11 +33,18 @@ func (p *Post) renderMarkDownHead() string {
 title = "%s"
 date = %s
 draft = %t
+tags = [%s]
 +++
-`, p.Title, p.DateCreated.Format(time.RFC3339), p.Draft)
+`, p.Title, p.DateCreated.Format(time.RFC3339), p.Draft, p.TagString())
 
 }
-
+func (p *Post) TagString() string {
+	str := ""
+	for _, tag := range p.Tags {
+		str += fmt.Sprintf("\"%s\", ", tag.Name)
+	}
+	return str
+}
 func (p *Post) String() string {
 	str := p.renderMarkDownHead()
 	str += p.Content

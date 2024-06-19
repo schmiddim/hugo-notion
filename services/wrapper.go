@@ -61,6 +61,19 @@ func (n *NotionWrapper) GetPostsFromNotionDB() []data.Post {
 			} else {
 				fmt.Println("No draft checkbox found")
 			}
+
+			tags := properties["Tags"].MultiSelect
+
+			if len(tags) > 0 {
+				for _, t := range tags {
+					p.Tags = append(p.Tags, data.Tag{Name: t.Name})
+
+					fmt.Println(t.Name)
+				}
+				fmt.Println(tags)
+
+			}
+
 			p.DateCreated = page.CreatedTime
 			children, err := n.client.FindBlockChildrenByID(context.Background(), page.ID, nil)
 			if err != nil {
