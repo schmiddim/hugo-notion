@@ -24,6 +24,7 @@ type Post struct {
 	Tags        []Tag
 	DateCreated time.Time
 	Author      Author
+	Draft       bool
 }
 
 func (p *Post) renderMarkDownHead() string {
@@ -31,9 +32,9 @@ func (p *Post) renderMarkDownHead() string {
 		`+++
 title = "%s"
 date = %s
-draft = false
+draft = %t
 +++
-`, p.Title, p.DateCreated.Format(time.RFC3339))
+`, p.Title, p.DateCreated.Format(time.RFC3339), p.Draft)
 
 }
 

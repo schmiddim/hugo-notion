@@ -53,6 +53,14 @@ func (n *NotionWrapper) GetPostsFromNotionDB() []data.Post {
 			for _, text := range titleProperty {
 				p.Title = text.PlainText
 			}
+			isDraft, ok := properties["draft"].Value().(*bool)
+			if ok {
+				if isDraft != nil && *isDraft {
+					p.Draft = *isDraft
+				}
+			} else {
+				fmt.Println("No draft checkbox found")
+			}
 			p.DateCreated = page.CreatedTime
 			children, err := n.client.FindBlockChildrenByID(context.Background(), page.ID, nil)
 			if err != nil {
